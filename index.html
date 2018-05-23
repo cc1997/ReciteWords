@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main Page</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .indexTitle{position:fixed;z-index:2;width:100%;overflow:hidden;height:35px;display:block;border-bottom:0px solid #000;background-color: #fff;color:#000;font-size: 13px;line-height:23px;text-align: center;}
+        .indexTitle a{overflow:hidden;color:#000;padding:5px;display: block;float: left;text-align: center;width:20%;border-bottom:1px solid #000;}
+        .indexTitle a:link{text-decoration:none;}
+        .pinkTag{background-color: #fcc;}
+        .mainContent{text-align:center;}
+        .chnStr{font-weight:bold;font-size: 26px;margin-top:130px;margin-bottom: 50px;}
+        .enStr{font-size: 18px;margin-bottom:20%;}
+        .userLoc{font-size: 12px;}
+        .userLoc span{font-weight: bold;color: #f88}
+        .changeBtn{margin: 0 auto;text-align: center}
+        .changeBtn a,.changeBtn a:link{text-decoration: none;color:black;display:inline-block;}
+        .footer{position:fixed;z-index:2;bottom:0px;overflow:hidden;height:50px;text-align:center;display:block;width:100%;border-top:1px solid black;background-color: white;font-size:28px;}
+        .footer a,.footer a:link{float: left; display: block;border-left:0px solid black;width:25%;text-decoration: none;cursor: pointer;color: black;}
+        .footer a:hover{color: black;}
+        .footIcon{margin-bottom:-5px;color:white;text-shadow:0px 0px 2px #000;}
+        .footIcon:hover{margin-bottom:-5px;color:black;text-shadow:0px 0px 0px #000;}
+        .footIconChoosen{margin-bottom:-5px;color:black;text-shadow:0px 0px 0px #000;}
+        .box ul{
+        overflow: hidden;
+        list-style: none;
+        margin: 50px auto;
+        max-width: 808px
+        }
+        .box a{
+        width: 50%;
+        height: 30px;
+        background: #fff;
+        margin-right: 2px;
+        position: relative;
+        margin-bottom: 2px;
+        overflow: hidden;
+        font-size: 14px;
+        color: #000;
+        text-align: center;
+        line-height: 30px;
+        border:1px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        }
+        .ripple{
+        position: absolute;
+        z-index: 2;
+        width: 12px;
+        height: 12px;
+        border-radius: 100%;
+        overflow: hidden;
+        -webkit-animation:ripple 1.6s;
+        animation:ripple 1.6s;
+        }
+
+        @-webkit-keyframes ripple {
+        0% {
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        100% {
+            -webkit-transform: scale(100);
+            transform: scale(100);
+            opacity: 0;
+        }
+        }
+        
+        @keyframes ripple {
+        0% {
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            opacity: 0.2;
+        }
+        100% {
+            -webkit-transform: scale(100);
+            transform: scale(100);
+            opacity: 0;
+        }
+        }
+        @media screen and (MAX-width:400px) {
+            .box a{
+            width: 80%;
+            height: 30px;
+            background: #fff;
+            margin-right: 2px;
+            position: relative;
+            margin-bottom: 2px;
+            overflow: hidden;
+            font-size: 14px;
+            color: #000;
+            text-align: center;
+            line-height: 30px;
+            border:1px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="ajaxBox">
+        <!--动态内容主体-->>
+    </div>
+    <!--ajaxBox end-->
+    <div class="footer">
+        <a id='hotWord'>
+            <div class='footIcon'><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></div>
+            <div style='font-size:10px;'><span>The Economist</span></div>
+        </a>
+        <a id='coldWord'>
+            <div class='footIcon'><span class="glyphicon glyphicon-book" aria-hidden="true"></span></div>
+            <div style='font-size:10px;'><span>生词本</span></div>
+        </a>
+        <a id='repertory'>
+            <div class='footIconChoosen'><span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span></div>
+            <div style='font-size:10px;'><span>词汇库</span></div>
+        </a>
+        <a id='updater'>
+            <div class='footIcon'><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></div>
+            <div style='font-size:10px;'><span>更新词库</span></div>
+        </a>
+    </div>
+</body>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $.ajax({
+        url:"repertory/index.php",//请求地址
+        // data:{bjId:bjDivId,x:1},//提交的数据
+        type:"POST",//提交的方式
+        dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+        success:function(data){
+            $('#ajaxBox').html(data);
+        }
+    });
+    $('.footer').children().click(function(){
+        $(this).parent().children().children().removeClass('footIconChoosen');
+        $(this).parent().children().each(function(){
+            $(this).children('div:first').addClass('footIcon');
+        })
+        $(this).children('div.footIcon').removeClass('footIcon');
+        $(this).children('div:first').addClass('footIconChoosen');
+        if($(this).attr('id')=='updater'){
+            $.ajax({
+                url:"update/index.php",//请求地址
+                //ata:{bjId:bjDivId,x:1},//提交的数据
+                type:"POST",//提交的方式
+                dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+                success:function(data){
+                    $('#ajaxBox').html(data);
+                }
+            });
+        }
+        if($(this).attr('id')=='repertory'){
+            $.ajax({
+                url:"repertory/index.php",//请求地址
+               // data:{bjId:bjDivId,x:1},//提交的数据
+                type:"POST",//提交的方式
+                dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+                success:function(data){
+                    $('#ajaxBox').html(data);
+                }
+            });
+        }
+        if($(this).attr('id')=='coldWord'){
+            $.ajax({
+                url:"coldword/index.php",//请求地址
+               // data:{bjId:bjDivId,x:1},//提交的数据
+                type:"POST",//提交的方式
+                dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+                success:function(data){
+                    $('#ajaxBox').html(data);
+                }
+            });
+        }
+        if($(this).attr('id')=='hotWord'){
+            $.ajax({
+                url:"hotword/index.php",//请求地址
+               // data:{bjId:bjDivId,x:1},//提交的数据
+                type:"POST",//提交的方式
+                dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+                success:function(data){
+                    $('#ajaxBox').html(data);
+                }
+            });
+        }
+    })
+
+    $('body').on("click",".indexTitle a",function(){///!!!!!!!重点!!!!!!.indexTitle a 子元素挂载
+        $('.indexTitle').children().removeClass('pinkTag');
+        $(this).addClass('pinkTag');
+        var x=$(this).attr('id');
+        $.ajax({
+            url:"repertory/index.php",//请求地址
+            data:{typeId:x},//提交的数据
+            type:"POST",//提交的方式
+            dataType:"HTML", //返回类型 TEXT字符串 JSON XML
+            success:function(data){
+                $('#ajaxBox').html(data);
+            }
+        });
+    })
+
+    $('body').on('click','.addColdWord',function(){
+        $(this).text('成功添加!');
+        $(this).css('background-color','lightgreen');
+        //$(this).text('已存在!');
+        //$(this).css('background-color','#fff000');
+        setTimeout(() => {
+            $(this).text('移出');
+            $(this).css('background-color','#fff000');
+        }, 1000);
+    })
+
+</script>
+</html>
